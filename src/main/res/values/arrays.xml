@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="resources">
+        <item>Mobile</item>
+        <item>Phone</item>
+        <item>Tablet</item>
+        <item>Conversations</item>
+        <item>Android</item>
+    </string-array>
+
+    <string-array name="filesizes">
+        <item>never</item>
+        <item>256 KB</item>
+        <item>512 KB</item>
+        <item>1 MB</item>
+        <item>256 MB</item>
+        <item>512 MB</item>
+        <item>1 GB</item>
+    </string-array>
+    <string-array name="filesizes_values">
+        <item>0</item>
+        <item>262144</item>
+        <item>524288</item>
+        <item>1048576</item>
+        <item>134217728</item>
+        <item>268435456</item>
+        <item>1073741824</item>
+    </string-array>
+
+    <string-array name="minimum_encryption">
+        <item>SSL 3.0</item>
+        <item>TLS 1.0</item>
+        <item>TLS 1.1</item>
+        <item>TLS 1.2</item>
+    </string-array>
+    <string-array name="minimum_ciphers">
+        <item>Insecure</item>
+        <item>Low Strength</item>
+        <item>Medium Strength</item>
+        <item>High Strength</item>
+    </string-array>
+
+    <string-array name="mute_options_descriptions">
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>2 hours</item>
+        <item>8 hours</item>
+        <item>until further notice</item>
+    </string-array>
+    <integer-array name="mute_options_durations">
+        <item>1800</item>
+        <item>3600</item>
+        <item>7200</item>
+        <item>28800</item>
+        <item>-1</item>
+    </integer-array>
+
+</resources>

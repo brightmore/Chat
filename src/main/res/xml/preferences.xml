@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="@string/pref_notification_settings" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="show_notification"
+            android:summary="@string/pref_notifications_summary"
+            android:title="@string/pref_notifications" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:dependency="show_notification"
+            android:key="vibrate_on_notification"
+            android:summary="@string/pref_vibrate_summary"
+            android:title="@string/pref_vibrate" />
+
+        <RingtonePreference
+            android:defaultValue="content://settings/system/notification_sound"
+            android:dependency="show_notification"
+            android:key="notification_ringtone"
+            android:ringtoneType="notification"
+            android:summary="@string/pref_sound_summary"
+            android:title="@string/pref_sound" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:dependency="show_notification"
+            android:key="always_notify_in_conference"
+            android:summary="@string/pref_conference_notifications_summary"
+            android:title="@string/pref_conference_notifications" />
+    </PreferenceCategory>
+    <PreferenceCategory android:key="pref_ui_options" android:title="@string/pref_ui_options" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="use_subject"
+            android:summary="@string/pref_conference_name_summary"
+            android:title="@string/pref_conference_name" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="use_larger_font"
+            android:summary="@string/pref_use_larger_font_summary"
+            android:title="@string/pref_use_larger_font" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:visibility="gone"
+            android:key="send_button_status"
+            android:summary="@string/pref_use_send_button_to_indicate_status_summary"
+            android:title="@string/pref_use_send_button_to_indicate_status" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:visibility="gone"
+            android:key="show_dynamic_tags"
+            android:summary="@string/pref_show_dynamic_tags_summary"
+            android:title="@string/pref_show_dynamic_tags" />
+
+                <CheckBoxPreference
+                    android:defaultValue="true"
+                    android:key="grant_new_contacts"
+                    android:summary="@string/pref_grant_presence_updates_summary"
+                    android:title="@string/pref_grant_presence_updates" />
+                <CheckBoxPreference
+                    android:defaultValue="true"
+                    android:key="confirm_messages"
+                    android:summary="@string/pref_confirm_messages_summary"
+                    android:title="@string/pref_confirm_messages" />
+                <CheckBoxPreference
+                    android:defaultValue="true"
+                    android:key="indicate_received"
+                    android:summary="@string/pref_use_indicate_received_summary"
+                    android:title="@string/pref_use_indicate_received" />
+                <CheckBoxPreference
+                    android:defaultValue="true"
+                    android:key="keep_foreground_service"
+                    android:title="@string/pref_keep_foreground_service"
+                    android:summary="@string/pref_keep_foreground_service_summary" />
+                <ListPreference
+                    android:defaultValue="1073741824"
+                    android:entries="@array/filesizes"
+                    android:entryValues="@array/filesizes_values"
+                    android:key="auto_accept_file_size"
+                    android:summary="@string/pref_accept_files_summary"
+                    android:title="@string/pref_accept_files" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="never_send"
+            android:summary="@string/pref_never_send_crash_summary"
+            android:title="@string/pref_never_send_crash" />
+        <eu.siacs.conversations.ui.AboutPreference
+            android:summary="@string/pref_about_conversations_summary"
+            android:key="about"
+            android:title="@string/title_activity_about" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="force_encryption"
+            android:summary="@string/pref_force_encryption_summary"
+            android:title="@string/pref_force_encryption" />
+        <ListPreference
+            android:defaultValue="TLS 1.2"
+            android:entries="@array/minimum_encryption"
+            android:entryValues="@array/minimum_encryption"
+            android:key="minimum_encryption"
+            android:summary="@string/pref_minimum_encryption_summary"
+            android:title="@string/pref_minimum_encryption" />
+        <ListPreference
+            android:defaultValue="High Strength"
+            android:entries="@array/minimum_ciphers"
+            android:entryValues="@array/minimum_ciphers"
+            android:key="minimum_ciphers"
+            android:summary="@string/pref_minimum_ciphers_summary"
+            android:title="@string/pref_minimum_ciphers" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="dont_save_encrypted"
+            android:summary="@string/pref_dont_save_encrypted_summary"
+            android:title="@string/pref_dont_save_encrypted" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
