@@ -102,18 +102,11 @@ public class PresenceParser extends AbstractParser implements
 				} else {
 					contact.removePresence(from.getResourcepart());
 				}
-				mXmppConnectionService.onContactStatusChanged
-						.onContactStatusChanged(contact, false);
+				mXmppConnectionService.onContactStatusChanged.onContactStatusChanged(contact, false);
 			} else if (type.equals("subscribe")) {
-				if (contact.getOption(Contact.Options.PREEMPTIVE_GRANT)) {
-					mXmppConnectionService.sendPresencePacket(account,
-							mPresenceGenerator.sendPresenceUpdatesTo(contact));
-				} else {
-					contact.setOption(Contact.Options.PENDING_SUBSCRIPTION_REQUEST);
-				}
+				mXmppConnectionService.sendPresencePacket(account,mPresenceGenerator.sendPresenceUpdatesTo(contact));
 			}
-			Element nick = packet.findChild("nick",
-					"http://jabber.org/protocol/nick");
+			Element nick = packet.findChild("nick","http://jabber.org/protocol/nick");
 			if (nick != null) {
 				contact.setPresenceName(nick.getContent());
 			}

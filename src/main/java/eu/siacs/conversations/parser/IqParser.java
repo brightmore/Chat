@@ -29,8 +29,7 @@ public class IqParser extends AbstractParser implements OnIqPacketReceived {
                 try {
                     jid = Jid.fromString(item.getAttribute("jid"));
                 } catch (final InvalidJidException e) {
-                    // TODO: Handle this?
-                    jid = null;
+                    continue;
                 }
                 String name = item.getAttribute("name");
 				String subscription = item.getAttribute("subscription");
