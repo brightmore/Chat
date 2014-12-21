@@ -15,10 +15,10 @@ android {
     buildToolsVersion '19.1'
 
     android {
-        defaultConfig {
-            testPackageName "org.thoughtcrime.ssl.pinning.tests"
-            testInstrumentationRunner "android.test.InstrumentationTestRunner"
-        }
+        //defaultConfig {
+        //    testPackageName "org.thoughtcrime.ssl.pinning.tests"
+        //    testInstrumentationRunner "android.test.InstrumentationTestRunner"
+        //}
         sourceSets {
             main {
                 manifest.srcFile 'AndroidManifest.xml'
