@@ -92,8 +92,7 @@
                     style="?android:attr/borderlessButtonStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/show_qr_code2"/>
+                    android:layout_weight="1"/>
 
                 <View
                     android:layout_width="1dp"
@@ -108,7 +107,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/scan_qr_code2"
+                    android:text="@string/manually_verify"
                     android:textColor="@color/primarytext" />
             </LinearLayout>
         </RelativeLayout>

@@ -311,10 +311,8 @@
     <string name="url_copied_to_clipboard">URL copied to clipboard</string>
     <string name="message_copied_to_clipboard">Message copied to clipboard</string>
     <string name="image_transmission_failed">Image transmission failed</string>
-    <string name="scan_qr_code">Scan Fingerprint</string>
-    <string name="scan_qr_code2">Scan Fingerprint</string>
-    <string name="show_qr_code">Show fingerprint</string>
-    <string name="show_qr_code2">Show Fingerprint</string>
+    <string name="scan_qr_code">Scan QR Code</string>
+    <string name="show_qr_code">Show QR Code</string>
     <string name="account_details">Account details</string>
     <string name="verify_otr">Verify Fingerprint</string>
     <string name="remote_fingerprint">Remote Fingerprint</string>
@@ -377,4 +375,6 @@
     <string name="manual_verification">Trust Fingerprint</string>
     <string name="secret_accepted">Correct Answer</string>
     <string name="reset">Reset</string>
+    <string name="ask_question">Ask question</string>
+    <string name="otr_session_not_started">Send a message to start an OTR session</string>
 </resources>

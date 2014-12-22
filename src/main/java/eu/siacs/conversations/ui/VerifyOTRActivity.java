@@ -32,6 +32,10 @@ import eu.siacs.conversations.xmpp.jid.Jid;
 public class VerifyOTRActivity extends XmppActivity implements XmppConnectionService.OnConversationUpdate {
 
 	public static final String ACTION_VERIFY_CONTACT = "verify_contact";
+	public static final String MODE_SHOW_FINGERPRINT = "mode_show_fingerprint";
+	public static final String MODE_SCAN_FINGERPRINT = "mode_scan_fingerprint";
+	public static final String MODE_ASK_QUESTION = "mode_ask_question";
+	public static final String MODE_MANUAL_VERIFICATION = "mode_manual_verification";
 
 	private RelativeLayout mVerificationAreaOne;
 	private RelativeLayout mVerificationAreaTwo;
@@ -125,6 +129,7 @@ public class VerifyOTRActivity extends XmppActivity implements XmppConnectionSer
 	};
 
 	private XmppUri mPendingUri = null;
+	private String mode = null;
 
 	protected boolean initSmp(final String question, final String secret) {
 		final Session session = mConversation.getOtrSession();
@@ -172,15 +177,17 @@ public class VerifyOTRActivity extends XmppActivity implements XmppConnectionSer
 		}
 	}
 
-	protected void verifyWithUri(XmppUri uri) {
+	protected boolean verifyWithUri(XmppUri uri) {
 		Contact contact = mConversation.getContact();
 		if (this.mConversation.getContact().getJid().equals(uri.getJid()) && uri.getFingerprint() != null) {
 			contact.addOtrFingerprint(uri.getFingerprint());
 			Toast.makeText(this,R.string.verified,Toast.LENGTH_SHORT).show();
 			updateView();
 			xmppConnectionService.syncRosterToDisk(contact.getAccount());
+			return true;
 		} else {
 			Toast.makeText(this,R.string.could_not_verify_fingerprint,Toast.LENGTH_SHORT).show();
+			return false;
 		}
 	}
 
@@ -194,7 +201,7 @@ public class VerifyOTRActivity extends XmppActivity implements XmppConnectionSer
 	}
 
 	protected boolean handleIntent(Intent intent) {
-		if (intent.getAction().equals(ACTION_VERIFY_CONTACT)) {
+		if (intent != null && intent.getAction().equals(ACTION_VERIFY_CONTACT)) {
 			try {
 				this.mAccount = this.xmppConnectionService.findAccountByJid(Jid.fromString(intent.getExtras().getString("account")));
 			} catch (final InvalidJidException ignored) {
@@ -206,6 +213,11 @@ public class VerifyOTRActivity extends XmppActivity implements XmppConnectionSer
 					return false;
 				}
 			} catch (final InvalidJidException ignored) {
+				return false;
+			}
+			this.mode = intent.getStringExtra("mode");
+			if (MODE_SCAN_FINGERPRINT.equals(this.mode)) {
+				new IntentIntegrator(this).initiateScan();
 				return false;
 			}
 			return true;
@@ -223,9 +235,12 @@ public class VerifyOTRActivity extends XmppActivity implements XmppConnectionSer
 				XmppUri uri = new XmppUri(data);
 				if (xmppConnectionServiceBound) {
 					verifyWithUri(uri);
+					finish();
 				} else {
 					this.mPendingUri = uri;
 				}
+			} else {
+				finish();
 			}
 		}
 		super.onActivityResult(requestCode, requestCode, intent);
@@ -234,19 +249,33 @@ public class VerifyOTRActivity extends XmppActivity implements XmppConnectionSer
 	@Override
 	protected void onBackendConnected() {
 		if (handleIntent(getIntent())) {
-			if (mPendingUri!=null) {
-				verifyWithUri(mPendingUri);
-				mPendingUri = null;
-			}
 			updateView();
+		} else if (mPendingUri!=null) {
+			verifyWithUri(mPendingUri);
+			finish();
+			mPendingUri = null;
 		}
+		setIntent(null);
 	}
 
 	protected void updateView() {
 		if (this.mConversation.hasValidOtrSession()) {
 			invalidateOptionsMenu();
-			this.mVerificationAreaOne.setVisibility(View.VISIBLE);
-			this.mVerificationAreaTwo.setVisibility(View.VISIBLE);
+
+			if (MODE_ASK_QUESTION.equals(this.mode)) {
+				this.mVerificationAreaOne.setVisibility(View.GONE);
+				this.mVerificationAreaTwo.setVisibility(View.VISIBLE);
+			} else if (MODE_SHOW_FINGERPRINT.equals(this.mode)) {
+				this.mVerificationAreaOne.setVisibility(View.VISIBLE);
+				this.mVerificationAreaTwo.setVisibility(View.GONE);
+				showQrCode();
+			} else if (MODE_SCAN_FINGERPRINT.equals(this.mode)) {
+				this.mVerificationAreaOne.setVisibility(View.VISIBLE);
+				this.mVerificationAreaTwo.setVisibility(View.GONE);
+			} else {
+				this.mVerificationAreaOne.setVisibility(View.VISIBLE);
+				this.mVerificationAreaTwo.setVisibility(View.GONE);
+			}
 
             this.mSharedSecretHint.setVisibility(View.VISIBLE);
             this.mSharedSecretSecret.setVisibility(View.VISIBLE);
@@ -263,7 +292,7 @@ public class VerifyOTRActivity extends XmppActivity implements XmppConnectionSer
 			if (mConversation.isOtrFingerprintVerified()) {
 				deactivateButton(mButtonScanQrCode, R.string.verified);
 			} else {
-				activateButton(mButtonScanQrCode, R.string.scan_qr_code2, mScanQrCodeListener);
+				activateButton(mButtonScanQrCode, R.string.manually_verify, null);
 			}
 			if (smp.status == Conversation.Smp.STATUS_NONE) {
 				activateButton(mButtonSharedSecretPositive, R.string.create, mCreateSharedSecretListener);

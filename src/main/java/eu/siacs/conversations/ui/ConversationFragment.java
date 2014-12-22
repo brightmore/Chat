@@ -154,13 +154,7 @@ public class ConversationFragment extends Fragment {
 
 		@Override
 		public void onClick(View v) {
-			if (conversation.getOtrFingerprint() != null) {
-				Intent intent = new Intent(getActivity(), VerifyOTRActivity.class);
-				intent.setAction(VerifyOTRActivity.ACTION_VERIFY_CONTACT);
-				intent.putExtra("contact", conversation.getContact().getJid().toBareJid().toString());
-				intent.putExtra("account", conversation.getAccount().getJid().toBareJid().toString());
-				startActivity(intent);
-			}
+			activity.verifyOtrSessionDialog(conversation,v);
 		}
 	};
 	private ConcurrentLinkedQueue<Message> mEncryptedMessages = new ConcurrentLinkedQueue<>();

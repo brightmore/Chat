@@ -288,7 +288,7 @@
                         android:background="@color/secondarybackground"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/show_qr_code2"
+                        android:text="@string/show_qr_code"
                         android:textSize="?attr/TextSizeBody"
                         android:textColor="@color/primarytext"
                         android:layout_marginTop="65dp"
