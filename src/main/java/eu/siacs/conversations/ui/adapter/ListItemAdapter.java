@@ -3,12 +3,15 @@ package eu.siacs.conversations.ui.adapter;
 import java.util.List;
 
 import eu.siacs.conversations.R;
+import eu.siacs.conversations.entities.Contact;
 import eu.siacs.conversations.entities.ListItem;
+import eu.siacs.conversations.entities.Presences;
 import eu.siacs.conversations.ui.XmppActivity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -39,6 +42,7 @@ public class ListItemAdapter extends ArrayAdapter<ListItem> {
 		TextView name = (TextView) view.findViewById(R.id.contact_display_name);
 		TextView jid = (TextView) view.findViewById(R.id.contact_jid);
 		ImageView picture = (ImageView) view.findViewById(R.id.contact_photo);
+		SurfaceView statusBar = (SurfaceView) view.findViewById(R.id.contact_status);
 		LinearLayout tagLayout = (LinearLayout) view.findViewById(R.id.tags);
 
 		List<ListItem.Tag> tags = item.getTags();
@@ -53,6 +57,30 @@ public class ListItemAdapter extends ArrayAdapter<ListItem> {
 				tv.setBackgroundColor(tag.getColor());
 				tagLayout.addView(tv);
 			}
+		}
+
+		if (item instanceof Contact) {
+			final Contact contact = (Contact) item;
+			statusBar.setVisibility(View.VISIBLE);
+			switch (contact.getMostAvailableStatus()) {
+				case Presences.CHAT:
+				case Presences.ONLINE:
+					statusBar.setBackgroundColor(activity.mColorOnline);
+					break;
+				case Presences.AWAY:
+				case Presences.XA:
+					statusBar.setBackgroundColor(activity.mColorOrange);
+					break;
+				case Presences.DND:
+					statusBar.setBackgroundColor(activity.mColorRed);
+					break;
+				case Presences.OFFLINE:
+				default:
+					statusBar.setBackgroundColor(activity.mColorGray);
+					break;
+			}
+		} else {
+			statusBar.setVisibility(View.GONE);
 		}
 
 		jid.setText(item.getJid().toString());

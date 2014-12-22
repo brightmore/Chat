@@ -146,8 +146,6 @@ public class StartConversationActivity extends XmppActivity implements OnRosterU
                     if (mSearchEditText != null) {
                         filter(mSearchEditText.getText().toString());
                     }
-                    updateStatusIndicators();
-                    hideConferenceStatus();
                 }
             });
 		}
@@ -181,78 +179,9 @@ public class StartConversationActivity extends XmppActivity implements OnRosterU
 				if (mSearchEditText != null) {
 					filter(mSearchEditText.getText().toString());
 				}
-                updateStatusIndicators();
-                hideConferenceStatus();
 			}
 		});
 	}
-/*
-    @Override
-    public void onAccountUpdate() {
-        runOnUiThread(new Runnable() {
-
-            @Override
-            public void run() {
-                updateStatusIndicators();
-                hideConferenceStatus();
-            }
-        });
-    }
-*/
-    private void hideConferenceStatus() {
-        if (mConferenceListFragment != null) {
-            final ListView listView = mConferenceListFragment.getListView();
-            for (int i = 0; i < listView.getChildCount(); i++) {
-                final View conferenceView = listView.getChildAt(i);
-                final SurfaceView statusBar = (SurfaceView) conferenceView.findViewById(R.id.contact_status);
-                if (statusBar != null) {
-                    statusBar.setVisibility(View.GONE);
-                }
-            }
-        }
-    }
-
-    private void updateStatusIndicators() {
-        if (getActionBar() != null &&
-                getActionBar().getSelectedNavigationIndex() == 0) {
-            for (final Account account : xmppConnectionService.getAccounts()) {
-                for (final Contact contact : account.getRoster().getContacts()) {
-                    if (mContactsAdapter != null) {
-                        final int pos = mContactsAdapter.getPosition(contact);
-                        if (pos != -1 && mContactsListFragment != null) {
-                            final ListView listView = mContactsListFragment.getListView();
-                            if (listView != null) {
-                                final View contactView = listView.getChildAt(pos);
-                                if (contactView != null) {
-                                    final SurfaceView statusBar = (SurfaceView) contactView.findViewById(R.id.contact_status);
-                                    statusBar.setVisibility(View.VISIBLE);
-                                    if (statusBar != null) {
-                                        switch (contact.getMostAvailableStatus()) {
-                                            case Presences.CHAT:
-                                            case Presences.ONLINE:
-                                                statusBar.setBackgroundColor(mColorOnline);
-                                                break;
-                                            case Presences.AWAY:
-                                            case Presences.XA:
-                                                statusBar.setBackgroundColor(mColorOrange);
-                                                break;
-                                            case Presences.DND:
-                                                statusBar.setBackgroundColor(mColorRed);
-                                                break;
-                                            case Presences.OFFLINE:
-                                            default:
-                                                statusBar.setBackgroundColor(mColorGray);
-                                                break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -314,21 +243,6 @@ public class StartConversationActivity extends XmppActivity implements OnRosterU
 				});
 
 	}
-
-    @Override
-    public void onWindowFocusChanged(final boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-            runOnUiThread(new Runnable() {
-
-                @Override
-                public void run() {
-                    updateStatusIndicators();
-                    hideConferenceStatus();
-                }
-            });
-        }
-    }
 
 	protected void openConversationForContact(int position) {
 		Contact contact = (Contact) contacts.get(position);
