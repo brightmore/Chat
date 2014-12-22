@@ -3,7 +3,7 @@ package eu.siacs.conversations.ui.adapter;
 import java.util.List;
 
 import eu.siacs.conversations.Config;
-import eu.siacs.conversations.R;
+import info.upperechelon.chat.R;
 import eu.siacs.conversations.entities.Conversation;
 import eu.siacs.conversations.entities.Downloadable;
 import eu.siacs.conversations.entities.DownloadableFile;

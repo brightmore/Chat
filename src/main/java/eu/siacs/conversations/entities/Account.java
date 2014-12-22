@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import eu.siacs.conversations.Config;
-import eu.siacs.conversations.R;
+import info.upperechelon.chat.R;
 import eu.siacs.conversations.crypto.OtrEngine;
 import eu.siacs.conversations.services.XmppConnectionService;
 import eu.siacs.conversations.xmpp.XmppConnection;

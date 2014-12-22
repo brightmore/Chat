@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 import eu.siacs.conversations.Config;
-import eu.siacs.conversations.R;
+import info.upperechelon.chat.R;
 import eu.siacs.conversations.entities.Account;
 import eu.siacs.conversations.entities.Conversation;
 import eu.siacs.conversations.entities.Message;

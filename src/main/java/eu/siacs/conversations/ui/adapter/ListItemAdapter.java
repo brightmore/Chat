@@ -2,7 +2,7 @@ package eu.siacs.conversations.ui.adapter;
 
 import java.util.List;
 
-import eu.siacs.conversations.R;
+import info.upperechelon.chat.R;
 import eu.siacs.conversations.entities.Contact;
 import eu.siacs.conversations.entities.ListItem;
 import eu.siacs.conversations.entities.Presences;
