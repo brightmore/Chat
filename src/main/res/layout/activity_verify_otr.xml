@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="26dp"
+        android:layout_marginTop="8dp"
         android:orientation="vertical">
         <TextView
             android:id="@+id/error_no_session"
@@ -20,12 +20,11 @@
             android:textSize="?attr/TextSizeBody"
             />
         <RelativeLayout
-            android:id="@+id/verification_area_one"
+            android:id="@+id/manual_verification_area"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:background="@drawable/infocard_border"
-            android:layout_margin="8dp"
-            android:layout_marginBottom="20dp">
+            android:layout_margin="8dp">
             <LinearLayout
                 android:id="@+id/fingerprint_area"
                 android:layout_width="fill_parent"
@@ -88,11 +87,11 @@
                 android:layout_alignParentRight="true" >
 
                 <Button
-                    android:id="@+id/button_show_qr_code"
                     style="?android:attr/borderlessButtonStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:enabled="false"/>
 
                 <View
                     android:layout_width="1dp"
@@ -102,7 +101,7 @@
                     android:background="@color/divider" />
 
                 <Button
-                    android:id="@+id/button_scan_qr_code"
+                    android:id="@+id/manual_verification_right_button"
                     style="?android:attr/borderlessButtonStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -112,11 +111,37 @@
             </LinearLayout>
         </RelativeLayout>
         <RelativeLayout
+            android:id="@+id/qr_code_verification_area"
             android:layout_width="fill_parent"
-            android:layout_height="14dp">
+            android:layout_height="fill_parent"
+            android:background="@drawable/infocard_border"
+            android:layout_margin="8dp">
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/qr_code_image_view"
+                    android:layout_height="240dp"
+                    android:layout_width="240dp"
+                    android:background="@color/primarytext"
+                    />
+                <TextView
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/qr_code_fingerprint_text"
+                    android:textColor="@color/primarytext"
+                    android:textSize="?attr/TextSizeBody"
+                    android:typeface="monospace"
+                    android:layout_gravity="center_horizontal"/>
+            </LinearLayout>
         </RelativeLayout>
         <RelativeLayout
-            android:id="@+id/verification_area_two"
+            android:id="@+id/smp_verification_area"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -136,6 +161,11 @@
                     android:layout_marginBottom="16dp"
                     />
                 <TextView
+                    android:id="@+id/smp_verification_explain"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp" />
+                <TextView
                     android:id="@+id/status_message"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -143,9 +173,19 @@
                     android:layout_gravity="center_horizontal"
                     android:textSize="?attr/TextSizeHeadline"
                     android:textStyle="bold"
+                    android:textColor="@color/primarytext"
                     android:visibility="gone"/>
-                <EditText
+                <TextView
+                    android:visibility="gone"
                     android:id="@+id/shared_secret_hint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/primarytext"
+                    android:textSize="?attr/TextSizeBody"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp"/>
+                <EditText
+                    android:id="@+id/shared_secret_hint_editable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textAutoComplete"
@@ -176,7 +216,7 @@
                 android:layout_alignParentRight="true" >
 
                 <Button
-                    android:id="@+id/button_shared_secret_negative"
+                    android:id="@+id/smp_verification_left_button"
                     style="?android:attr/borderlessButtonStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -193,7 +233,7 @@
                     android:background="@color/divider" />
 
                 <Button
-                    android:id="@+id/button_shared_secret_positive"
+                    android:id="@+id/smp_verification_right_button"
                     style="?android:attr/borderlessButtonStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

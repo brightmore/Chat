@@ -712,8 +712,18 @@ public class ConversationFragment extends Fragment {
 
 	protected void makeFingerprintWarning() {
 		if (conversation.smpRequested()) {
-			showSnackbar(R.string.smp_requested, R.string.verify, clickToVerify);
-		} else if (conversation.hasValidOtrSession() && (conversation.getOtrSession().getSessionStatus() == SessionStatus.ENCRYPTED)
+			showSnackbar(R.string.smp_requested, R.string.verify, new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					Intent intent = new Intent(activity, VerifyOTRActivity.class);
+					intent.setAction(VerifyOTRActivity.ACTION_VERIFY_CONTACT);
+					intent.putExtra("contact", conversation.getContact().getJid().toBareJid().toString());
+					intent.putExtra("account", conversation.getAccount().getJid().toBareJid().toString());
+					intent.putExtra("mode", VerifyOTRActivity.MODE_ANSWER_QUESTION);
+					startActivity(intent);
+				}
+			});
+			} else if (conversation.hasValidOtrSession() && (conversation.getOtrSession().getSessionStatus() == SessionStatus.ENCRYPTED)
 				&& (!conversation.isOtrFingerprintVerified())) {
 			showSnackbar(R.string.unknown_otr_fingerprint, R.string.verify, clickToVerify);
 		}
