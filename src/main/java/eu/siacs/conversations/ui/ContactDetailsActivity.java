@@ -32,7 +32,7 @@ import org.openintents.openpgp.util.OpenPgpUtils;
 import java.util.Iterator;
 import java.util.List;
 
-import info.upperechelon.chat.R;
+import eu.siacs.conversations.R;
 import eu.siacs.conversations.crypto.PgpEngine;
 import eu.siacs.conversations.entities.Account;
 import eu.siacs.conversations.entities.Contact;

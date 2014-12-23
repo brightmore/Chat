@@ -3,7 +3,7 @@ package eu.siacs.conversations.ui;
 import android.app.Activity;
 import android.os.Bundle;
 
-import info.upperechelon.chat.R;
+import eu.siacs.conversations.R;
 
 public class AboutActivity extends Activity {
 

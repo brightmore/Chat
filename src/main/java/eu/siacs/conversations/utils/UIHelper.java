@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import info.upperechelon.chat.R;
+import eu.siacs.conversations.R;
 import eu.siacs.conversations.entities.Account;
 import eu.siacs.conversations.entities.Contact;
 import eu.siacs.conversations.entities.Conversation;

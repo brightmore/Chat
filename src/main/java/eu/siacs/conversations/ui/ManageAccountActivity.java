@@ -3,7 +3,7 @@ package eu.siacs.conversations.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import info.upperechelon.chat.R;
+import eu.siacs.conversations.R;
 import eu.siacs.conversations.entities.Account;
 import eu.siacs.conversations.services.XmppConnectionService.OnAccountUpdate;
 import eu.siacs.conversations.ui.adapter.AccountAdapter;

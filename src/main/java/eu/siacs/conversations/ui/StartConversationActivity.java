@@ -53,7 +53,7 @@ import java.util.Collections;
 import java.util.List;
 
 import eu.siacs.conversations.Config;
-import info.upperechelon.chat.R;
+import eu.siacs.conversations.R;
 import eu.siacs.conversations.entities.Account;
 import eu.siacs.conversations.entities.Bookmark;
 import eu.siacs.conversations.entities.Contact;

@@ -30,7 +30,7 @@ import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import eu.siacs.conversations.Config;
-import info.upperechelon.chat.R;
+import eu.siacs.conversations.R;
 import eu.siacs.conversations.entities.DownloadableFile;
 import eu.siacs.conversations.entities.Message;
 import eu.siacs.conversations.services.XmppConnectionService;
