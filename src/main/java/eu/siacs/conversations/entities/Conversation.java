@@ -323,7 +323,7 @@ public class Conversation extends AbstractEntity {
 				builder.insert(26, " ");
 				builder.insert(35, " ");
 				this.otrFingerprint = builder.toString();
-			} catch (final OtrCryptoException ignored) {
+			} catch (final OtrCryptoException | UnsupportedOperationException ignored) {
 
 			}
 		}
