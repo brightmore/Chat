@@ -982,9 +982,9 @@ public class ConversationActivity extends XmppActivity implements
 	}
 
 	public void updateConversationList() {
-		xmppConnectionService
-				.populateWithOrderedConversations(conversationList);
+		xmppConnectionService.populateWithOrderedConversations(conversationList);
 		listAdapter.notifyDataSetChanged();
+		invalidateOptionsMenu();
 	}
 
 	public void runIntent(PendingIntent pi, int requestCode) {
