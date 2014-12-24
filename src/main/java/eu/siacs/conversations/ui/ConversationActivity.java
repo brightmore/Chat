@@ -354,7 +354,7 @@ public class ConversationActivity extends XmppActivity implements
 				if (this.getSelectedConversation().getMode() == Conversation.MODE_MULTI) {
 					menuContactDetails.setVisible(false);
 					menuAttach.setVisible(false);
-                    menuSecure.setIcon(R.drawable.ic_action_not_secure);
+                    menuSecure.setVisible(false);
 				} else {
 					menuMucDetails.setVisible(false);
 					menuInviteContact.setVisible(false);
