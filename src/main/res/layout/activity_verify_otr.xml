@@ -87,11 +87,12 @@
                 android:layout_alignParentRight="true" >
 
                 <Button
+                    android:id="@+id/manual_verification_left_button"
                     style="?android:attr/borderlessButtonStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:enabled="false"/>
+                    android:text="@string/cancel"/>
 
                 <View
                     android:layout_width="1dp"

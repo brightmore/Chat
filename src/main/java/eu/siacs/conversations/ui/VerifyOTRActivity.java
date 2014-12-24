@@ -53,6 +53,7 @@ public class VerifyOTRActivity extends XmppActivity implements XmppConnectionSer
 	private ImageView mQrCodeImageView;
 	private Button mSmpVerificationLeftButton;
 	private Button mSmpVerificationRightButton;
+	private Button mManualVerificationLeftButton;
 	private Button mManualVerificationRightButton;
 	private Account mAccount;
 	private Conversation mConversation;
@@ -64,8 +65,9 @@ public class VerifyOTRActivity extends XmppActivity implements XmppConnectionSer
 		@Override
 		public void onClick(DialogInterface dialogInterface, int click) {
 			mConversation.verifyOtrFingerprint();
-			updateView();
 			xmppConnectionService.syncRosterToDisk(mConversation.getAccount());
+			Toast.makeText(VerifyOTRActivity.this,R.string.verified,Toast.LENGTH_SHORT).show();
+			finish();
 		}
 	};
 
@@ -293,7 +295,9 @@ public class VerifyOTRActivity extends XmppActivity implements XmppConnectionSer
 		this.mRemoteJid.setText(this.mConversation.getContact().getJid().toBareJid().toString());
 		if (this.mConversation.isOtrFingerprintVerified()) {
 			deactivateButton(this.mManualVerificationRightButton,R.string.verified);
+			activateButton(this.mManualVerificationLeftButton,R.string.cancel,this.mFinishListener);
 		} else {
+			activateButton(this.mManualVerificationLeftButton,R.string.cancel,this.mFinishListener);
 			activateButton(this.mManualVerificationRightButton,R.string.manually_verify, new View.OnClickListener() {
 				@Override
 				public void onClick(View view) {
@@ -411,6 +415,7 @@ public class VerifyOTRActivity extends XmppActivity implements XmppConnectionSer
 		this.mYourFingerprint = (TextView) findViewById(R.id.your_fingerprint);
 		this.mSmpVerificationLeftButton = (Button) findViewById(R.id.smp_verification_left_button);
 		this.mSmpVerificationRightButton = (Button) findViewById(R.id.smp_verification_right_button);
+		this.mManualVerificationLeftButton  = (Button) findViewById(R.id.manual_verification_left_button);
 		this.mManualVerificationRightButton = (Button) findViewById(R.id.manual_verification_right_button);
 		this.mQrCodeImageView = (ImageView) findViewById(R.id.qr_code_image_view);
 		this.mQrCodeFingerprintText = (TextView) findViewById(R.id.qr_code_fingerprint_text);
