@@ -8,6 +8,7 @@
         <item name="TextSizeInfo">12sp</item>
         <item name="TextSizeBody">14sp</item>
         <item name="TextSizeSmall">11sp</item>
+        <item name="TextSizeExtraSmall">10sp</item>
         <item name="TextSizeLarge">16sp</item>
         <item name="TextSizeHeadline">19sp</item>
     </style>

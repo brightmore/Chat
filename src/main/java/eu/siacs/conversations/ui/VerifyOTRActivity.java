@@ -298,7 +298,7 @@ public class VerifyOTRActivity extends XmppActivity implements XmppConnectionSer
 			activateButton(this.mManualVerificationLeftButton,R.string.cancel,this.mFinishListener);
 		} else {
 			activateButton(this.mManualVerificationLeftButton,R.string.cancel,this.mFinishListener);
-			activateButton(this.mManualVerificationRightButton,R.string.manually_verify, new View.OnClickListener() {
+			activateButton(this.mManualVerificationRightButton,R.string.verify, new View.OnClickListener() {
 				@Override
 				public void onClick(View view) {
 					showManuallyVerifyDialog();

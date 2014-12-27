@@ -5,6 +5,7 @@
     <attr name="TextSizeBody" format="dimension" />
     <attr name="TextSizeHeadline" format="dimension" />
     <attr name="TextSizeSmall" format="dimension" />
+    <attr name="TextSizeExtraSmall" format="dimension" />
     <attr name="TextSizeLarge" format="dimension" />
 
 

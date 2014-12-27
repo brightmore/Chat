@@ -194,6 +194,7 @@
     <string name="your_fingerprint">Your fingerprint</string>
     <string name="otr_fingerprint">OTR fingerprint</string>
     <string name="verify">Verify</string>
+    <string name="trust">Trust fingerprint</string>
     <string name="decrypt">Decrypt</string>
     <string name="conferences">Conferences</string>
     <string name="search">Search</string>
@@ -311,15 +312,15 @@
     <string name="url_copied_to_clipboard">URL copied to clipboard</string>
     <string name="message_copied_to_clipboard">Message copied to clipboard</string>
     <string name="image_transmission_failed">Image transmission failed</string>
-    <string name="scan_qr_code">Scan QR Code</string>
-    <string name="show_qr_code">Show QR Code</string>
+    <string name="scan_qr_code">Scan Fingerprint</string>
+    <string name="show_qr_code">Show Fingerprint</string>
     <string name="account_details">Account details</string>
     <string name="verify_otr">Verify Fingerprint</string>
     <string name="remote_fingerprint">Remote Fingerprint</string>
     <string name="scan">scan</string>
     <string name="or_touch_phones">(or touch phones)</string>
     <string name="smp">Question &amp; Answer</string>
-    <string name="qrcode">QR Code</string>
+    <string name="qrcode">Fingerprint</string>
     <string name="otrverification">Fingerprints</string>
     <string name="shared_secret_hint">Question</string>
     <string name="shared_secret_secret">Shared Secret</string>
@@ -350,8 +351,8 @@
     <string name="file_deleted">The file has been deleted</string>
     <string name="no_application_found_to_open_file">No application found to open file</string>
     <string name="could_not_verify_fingerprint">Could not verify fingerprint</string>
-    <string name="manually_verify">Manually Verify</string>
-    <string name="are_you_sure_verify_fingerprint">Are you sure that you want to verify your contacts fingerprint?</string>
+    <string name="manually_verify">Manual Verification</string>
+    <string name="are_you_sure_verify_fingerprint">Are you sure that you want to trust your contacts fingerprint?</string>
     <string name="pref_show_dynamic_tags">Show dynamic tags</string>
     <string name="pref_show_dynamic_tags_summary">Display read-only tags underneath contacts</string>
     <string name="enable_notifications">Enable notifications</string>
@@ -376,10 +377,11 @@
     <string name="secret_accepted">Correct Answer</string>
     <string name="reset">Reset</string>
     <string name="ask_question">Ask question</string>
-    <string name="otr_session_not_started">Send a message to start an OTR session</string>
-    <string name="smp_explain_question">If you and your contact have a secret in common that no one else knows like an inside joke or simply what you had for lunch the last time you met you can use that secret to verify an OTR Session. You can provide a hint or a question for your contact.</string>
-    <string name="smp_explain_answer">Your contact would like to verify the OTR session by challenging you with a shared secret. Your contact provided the following hint or question for that secret.</string>
+    <string name="otr_session_not_started">Send a message to start an encrypted chat</string>
+    <string name="smp_explain_question">If you and your contact have a secret in common that no one else knows (like an inside joke or simply what you had for lunch the last time you met) you can use that secret to verify each other\'s fingerprints.\n\nYou provide a hint or a question for your contact who will respond with a case-sensitive answer.\n</string>
+    <string name="smp_explain_answer">Your contact would like to verify your fingerprint by challenging you with a shared secret. Your contact provided the following hint or question for that secret.</string>
     <string name="shared_secret_hint_should_not_be_empty">Your hint should not be empty</string>
     <string name="shared_secret_can_not_be_empty">Your shared secret can not be empty</string>
-    <string name="qrcode_verification_explanation">Have your contact select ‘Scan QR Code’ as a verification method and scan the QR code below to verify your OTR Fingerprint.\nAfter that you should do the same.</string>
+    <string name="qrcode_verification_explanation">Have your contact select ‘Scan Fingerprint’ as a verification method and scan your fingerprint using their camera to verify you.\n\nAfterwards you should scan their fingerprint.\n</string>
+    <string name="manual_verification_explanation">If you are not in close proximity to your contact, don\'t have a shared secret and trust the communications server isn\'t hacked you can blindly trust each other\'s fingerprints.\n\nYou can also use this to verify fingerprints over another medium (such as a phone call or email).\n\nThis should only be used as a last resort when the other verification methods are unavailable.\n</string>
 </resources>
