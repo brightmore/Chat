@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.siacs.conversations.services.XmppConnectionService;
+import eu.siacs.conversations.utils.CryptoHelper;
 import eu.siacs.conversations.xmpp.jid.InvalidJidException;
 import eu.siacs.conversations.xmpp.jid.Jid;
 
@@ -311,20 +312,17 @@ public class Conversation extends AbstractEntity {
 	public String getOtrFingerprint() {
 		if (this.otrFingerprint == null) {
 			try {
-				if (getOtrSession() == null) {
-					return "";
+				if (getOtrSession() == null || getOtrSession().getSessionStatus() != SessionStatus.ENCRYPTED) {
+					return null;
 				}
-				DSAPublicKey remotePubKey = (DSAPublicKey) getOtrSession()
-						.getRemotePublicKey();
-				StringBuilder builder = new StringBuilder(
-						new OtrCryptoEngineImpl().getFingerprint(remotePubKey));
-				builder.insert(8, " ");
-				builder.insert(17, " ");
-				builder.insert(26, " ");
-				builder.insert(35, " ");
-				this.otrFingerprint = builder.toString();
+				DSAPublicKey remotePubKey = (DSAPublicKey) getOtrSession().getRemotePublicKey();
+				final String fingerprint = account.getOtrEngine().getFingerprint(remotePubKey);
+				if (fingerprint==null) {
+					return null;
+				}
+				this.otrFingerprint = CryptoHelper.prettifyFingerprint(fingerprint);
 			} catch (final OtrCryptoException | UnsupportedOperationException ignored) {
-
+				return null;
 			}
 		}
 		return this.otrFingerprint;

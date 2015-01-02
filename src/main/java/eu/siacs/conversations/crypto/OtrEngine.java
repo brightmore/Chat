@@ -34,7 +34,7 @@ import net.java.otr4j.crypto.OtrCryptoException;
 import net.java.otr4j.session.InstanceTag;
 import net.java.otr4j.session.SessionID;
 
-public class OtrEngine implements OtrEngineHost {
+public class OtrEngine extends OtrCryptoEngineImpl implements OtrEngineHost {
 
 	private Account account;
 	private OtrPolicy otrPolicy;
@@ -53,7 +53,6 @@ public class OtrEngine implements OtrEngineHost {
 
 	private KeyPair loadKey(JSONObject keys) {
 		if (keys == null) {
-
 			return null;
 		}
 		try {
@@ -127,7 +126,7 @@ public class OtrEngine implements OtrEngineHost {
 	@Override
 	public byte[] getLocalFingerprintRaw(SessionID arg0) {
 		try {
-			return new OtrCryptoEngineImpl().getFingerprintRaw(getPublicKey());
+			return getFingerprintRaw(getPublicKey());
 		} catch (OtrCryptoException e) {
 			return null;
 		}
@@ -181,6 +180,7 @@ public class OtrEngine implements OtrEngineHost {
 		packet.setBody(body);
 		packet.addChild("private", "urn:xmpp:carbons:2");
 		packet.addChild("no-copy", "urn:xmpp:hints");
+		packet.addChild("no-store", "urn:xmpp:hints");
 		packet.setType(MessagePacket.TYPE_CHAT);
 		account.getXmppConnection().sendMessagePacket(packet);
 	}
@@ -251,14 +251,16 @@ public class OtrEngine implements OtrEngineHost {
 	}
 
 	@Override
-    public void verify(SessionID id, String fingerprint, boolean approved) {
+	public void verify(SessionID id, String fingerprint, boolean approved) {
+		Log.d(Config.LOGTAG,"OtrEngine.verify("+id.toString()+","+fingerprint+","+String.valueOf(approved)+")");
 		try {
 			final Jid jid = Jid.fromSessionID(id);
 			Conversation conversation = this.mXmppConnectionService.find(this.account,jid);
 			if (conversation!=null) {
-                if (approved) {
-                    conversation.getContact().addOtrFingerprint(CryptoHelper.prettifyFingerprint(fingerprint));
-                }
+				if (approved) {
+					conversation.getContact().addOtrFingerprint(CryptoHelper.prettifyFingerprint(fingerprint));
+
+				}
 				conversation.smp().hint = null;
 				conversation.smp().status = Conversation.Smp.STATUS_VERIFIED;
 				mXmppConnectionService.updateConversationUi();
