@@ -1,5 +1,8 @@
 package eu.siacs.conversations.parser;
 
+import android.util.Log;
+
+import eu.siacs.conversations.Config;
 import eu.siacs.conversations.crypto.PgpEngine;
 import eu.siacs.conversations.entities.Account;
 import eu.siacs.conversations.entities.Contact;
@@ -105,6 +108,11 @@ public class PresenceParser extends AbstractParser implements
 				mXmppConnectionService.onContactStatusChanged.onContactStatusChanged(contact, false);
 			} else if (type.equals("subscribe")) {
 				mXmppConnectionService.sendPresencePacket(account,mPresenceGenerator.sendPresenceUpdatesTo(contact));
+			}
+
+			if (!contact.getOption(Contact.Options.ASKING) && !contact.getOption(Contact.Options.FROM)) {
+				Log.d(Config.LOGTAG, "automatically requesting presence updates from " + contact.getJid().toString());
+				mXmppConnectionService.sendPresencePacket(account,mPresenceGenerator.requestPresenceUpdatesFrom(contact));
 			}
 			Element nick = packet.findChild("nick","http://jabber.org/protocol/nick");
 			if (nick != null) {
