@@ -64,10 +64,13 @@ public class VerifyOTRActivity extends XmppActivity implements XmppConnectionSer
 
 		@Override
 		public void onClick(DialogInterface dialogInterface, int click) {
-			mConversation.verifyOtrFingerprint();
-			xmppConnectionService.syncRosterToDisk(mConversation.getAccount());
-			Toast.makeText(VerifyOTRActivity.this,R.string.verified,Toast.LENGTH_SHORT).show();
-			finish();
+			if (mConversation.verifyOtrFingerprint()) {
+				xmppConnectionService.syncRosterToDisk(mConversation.getAccount());
+				Toast.makeText(VerifyOTRActivity.this, R.string.verified, Toast.LENGTH_SHORT).show();
+				finish();
+			} else {
+				Toast.makeText(VerifyOTRActivity.this,R.string.could_not_verify_fingerprint,Toast.LENGTH_SHORT).show();
+			}
 		}
 	};
 
@@ -181,11 +184,15 @@ public class VerifyOTRActivity extends XmppActivity implements XmppConnectionSer
 	protected boolean verifyWithUri(XmppUri uri) {
 		Contact contact = mConversation.getContact();
 		if (this.mConversation.getContact().getJid().equals(uri.getJid()) && uri.getFingerprint() != null) {
-			contact.addOtrFingerprint(uri.getFingerprint());
-			Toast.makeText(this,R.string.verified,Toast.LENGTH_SHORT).show();
-			updateView();
-			xmppConnectionService.syncRosterToDisk(contact.getAccount());
-			return true;
+			if (contact.addOtrFingerprint(uri.getFingerprint())) {
+				Toast.makeText(this, R.string.verified, Toast.LENGTH_SHORT).show();
+				updateView();
+				xmppConnectionService.syncRosterToDisk(contact.getAccount());
+				return true;
+			} else {
+				Toast.makeText(this,R.string.could_not_verify_fingerprint,Toast.LENGTH_SHORT).show();
+				return false;
+			}
 		} else {
 			Toast.makeText(this,R.string.could_not_verify_fingerprint,Toast.LENGTH_SHORT).show();
 			return false;

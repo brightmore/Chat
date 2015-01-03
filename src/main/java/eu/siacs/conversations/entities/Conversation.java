@@ -328,8 +328,8 @@ public class Conversation extends AbstractEntity {
 		return this.otrFingerprint;
 	}
 
-	public void verifyOtrFingerprint() {
-		getContact().addOtrFingerprint(getOtrFingerprint());
+	public boolean verifyOtrFingerprint() {
+		return getContact().addOtrFingerprint(getOtrFingerprint());
 	}
 
 	public boolean isOtrFingerprintVerified() {
