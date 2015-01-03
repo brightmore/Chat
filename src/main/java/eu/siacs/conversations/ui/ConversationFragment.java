@@ -503,7 +503,7 @@ public class ConversationFragment extends Fragment {
 		}
 		this.mEditMessage.setText("");
 		this.mEditMessage.append(this.conversation.getNextMessage());
-		this.messagesView.invalidate();
+		this.messagesView.invalidateViews();
 		updateMessages();
 	}
 
