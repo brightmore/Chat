@@ -535,24 +535,24 @@ public class XmppConnection implements Runnable {
 		return getPreferences().getBoolean("enable_legacy_ssl", false);
 	}
 
-    private void switchOverToTls(Tag currentTag) throws XmlPullParserException,
-            IOException {
+    private void switchOverToTls(final Tag currentTag) throws XmlPullParserException, IOException {
         tagReader.readTag();
         try {
-            SSLContext sc = SSLContext.getInstance("TLS");
+            final SSLContext sc = SSLContext.getInstance("TLS");
             sc.init(null,
                     new X509TrustManager[]{this.mXmppConnectionService.getMemorizingTrustManager()},
-                    mXmppConnectionService.getRNG());
-            SSLSocketFactory factory = sc.getSocketFactory();
+                    mXmppConnectionService.getRNG()
+            );
+            final SSLSocketFactory factory = sc.getSocketFactory();
+            final HostnameVerifier verifier = this.mXmppConnectionService.getMemorizingTrustManager().wrapHostnameVerifier(new StrictHostnameVerifier());
+            final InetAddress address = socket == null ? null : socket.getInetAddress();
 
-            if (factory == null) {
-                throw new IOException("SSLSocketFactory was null");
+            if (factory == null || address == null || verifier == null) {
+                throw new IOException("could not setup ssl");
             }
 
-            HostnameVerifier verifier = this.mXmppConnectionService.getMemorizingTrustManager().wrapHostnameVerifier(new StrictHostnameVerifier());
-
-            if (socket == null) throw new IOException("socket was null");
-            SSLSocket sslSocket = (SSLSocket) factory.createSocket(socket, socket.getInetAddress().getHostAddress(), socket.getPort(), true);
+            final SSLSocket sslSocket = (SSLSocket) factory.createSocket(socket, address.getHostAddress(), socket.getPort(), true);
+            if (sslSocket == null) throw new IOException("could not initialize ssl socket");
 
             // Set minimum encryption protocols
             final String[] supportProtocols;
@@ -612,7 +612,7 @@ public class XmppConnection implements Runnable {
             supportedCiphers.toArray(supportCiphers);
             sslSocket.setEnabledCipherSuites(supportCiphers);
 
-            if (verifier != null && !verifier.verify(account.getServer().getDomainpart(), sslSocket.getSession())) {
+            if (!verifier.verify(account.getServer().getDomainpart(),sslSocket.getSession())) {
                 sslSocket.close();
                 throw new IOException("host mismatch in TLS connection");
             }
@@ -623,10 +623,10 @@ public class XmppConnection implements Runnable {
             enabledEncryption = true;
             processStream(tagReader.readTag());
             sslSocket.close();
-        } catch (NoSuchAlgorithmException e1) {
-            e1.printStackTrace();
-        } catch (KeyManagementException e) {
-            e.printStackTrace();
+        } catch (final NoSuchAlgorithmException | KeyManagementException e1) {
+            Log.d(Config.LOGTAG,account.getJid().toBareJid()+": TLS certificate verification failed");
+            disconnect(true);
+            changeStatus(Account.State.SECURITY_ERROR);
         }
     }
 
