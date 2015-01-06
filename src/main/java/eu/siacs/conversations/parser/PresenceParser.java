@@ -110,10 +110,6 @@ public class PresenceParser extends AbstractParser implements
 				mXmppConnectionService.sendPresencePacket(account,mPresenceGenerator.sendPresenceUpdatesTo(contact));
 			}
 
-			if (!contact.getOption(Contact.Options.ASKING) && !contact.getOption(Contact.Options.FROM)) {
-				Log.d(Config.LOGTAG, "automatically requesting presence updates from " + contact.getJid().toString());
-				mXmppConnectionService.sendPresencePacket(account,mPresenceGenerator.requestPresenceUpdatesFrom(contact));
-			}
 			Element nick = packet.findChild("nick","http://jabber.org/protocol/nick");
 			if (nick != null) {
 				contact.setPresenceName(nick.getContent());

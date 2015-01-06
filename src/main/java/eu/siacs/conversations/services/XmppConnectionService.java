@@ -2028,6 +2028,14 @@ public class XmppConnectionService extends Service {
 		}
 	}
 
+	public void requestPresenceUpdatesIfMissing(final Contact contact) {
+		if (!contact.getOption(Contact.Options.ASKING) && !contact.getOption(Contact.Options.TO)) {
+			Log.d(Config.LOGTAG, "automatically requesting presence updates from " + contact.getJid().toString());
+			contact.setOption(Contact.Options.ASKING);
+			sendPresencePacket(contact.getAccount(),mPresenceGenerator.requestPresenceUpdatesFrom(contact));
+		}
+	}
+
 	public interface OnConversationUpdate {
 		public void onConversationUpdate();
 	}
