@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <group android:checkableBehavior="single" >
+        <item
+            android:id="@+id/timeout_never"
+            android:title="@string/never"/>
+        <item
+            android:id="@+id/timeout_30min"
+            android:title="@string/thirty_minutes"/>
+        <item
+            android:id="@+id/timeout_1h"
+            android:title="@string/one_hour"/>
+        <item
+            android:id="@+id/timeout_6h"
+            android:title="@string/six_hours"/>
+        <item
+            android:id="@+id/timeout_12h"
+            android:title="@string/twelve_hours"/>
+        <item
+            android:id="@+id/timeout_1d"
+            android:title="@string/one_day"/>
+        <item
+            android:id="@+id/timeout_1w"
+            android:title="@string/one_week"/>
+        <item
+            android:id="@+id/timeout_1m"
+            android:title="@string/one_month"/>
+    </group>
+
+</menu>

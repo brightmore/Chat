@@ -384,4 +384,19 @@
     <string name="shared_secret_can_not_be_empty">Your shared secret can not be empty</string>
     <string name="qrcode_verification_explanation">Have your contact select ‘Scan Fingerprint’ as a verification method and scan your fingerprint using their camera to verify you.\n\nAfterwards you should scan their fingerprint.\n</string>
     <string name="manual_verification_explanation">If you aren\'t in close proximity to your contact, don\'t have a shared secret and trust the communications server isn\'t hacked you can blindly accept each other\'s fingerprints.\n\nYou can also use this to verify fingerprints over another medium (such as a phone call or email).\n\nThis should only be used as a last resort when the other verification methods are unavailable.\n</string>
+    <string name="message_timeout">Message timeout</string>
+    <string name="never">Never</string>
+    <string name="thirty_minutes">30 minutes</string>
+    <string name="one_hour">1 hours</string>
+    <string name="six_hours">6 hours</string>
+    <string name="twelve_hours">12 hours</string>
+    <string name="one_day">1 day</string>
+    <string name="one_week">1 week</string>
+    <string name="one_month">1 month</string>
+    <string name="days">%s days</string>
+    <string name="hours">%s hours</string>
+    <string name="minutes">%s minutes</string>
+    <string name="one_minute">1 minute</string>
+    <string name="message_has_been_destroyed">This message has been destroyed</string>
+    <string name="destroyed">Destroyed</string>
 </resources>

@@ -1,5 +1,7 @@
 package eu.siacs.conversations.generator;
 
+import android.util.Log;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -7,6 +9,8 @@ import java.util.TimeZone;
 
 import net.java.otr4j.OtrException;
 import net.java.otr4j.session.Session;
+
+import eu.siacs.conversations.Config;
 import eu.siacs.conversations.entities.Account;
 import eu.siacs.conversations.entities.Conversation;
 import eu.siacs.conversations.entities.Message;
@@ -43,7 +47,20 @@ public class MessageGenerator extends AbstractGenerator {
 		if (addDelay) {
 			addDelay(packet, message.getTimeSent());
 		}
+		if (message.getTimeout() != 0) {
+			addTimeout(packet,message.getTimeout());
+		}
+		Log.d(Config.LOGTAG, packet.toString());
 		return packet;
+	}
+
+	private void addTimeout(MessagePacket packet, long timestamp) {
+		final SimpleDateFormat mDateFormat = new SimpleDateFormat(
+				"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
+		mDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+		Element timeout = packet.addChild("timeout", "eu:siacs:conversations:timeout");
+		Date date = new Date(timestamp);
+		timeout.setAttribute("at", mDateFormat.format(date));
 	}
 
 	private void addDelay(MessagePacket packet, long timestamp) {

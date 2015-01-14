@@ -5,11 +5,17 @@ import android.util.Log;
 import net.java.otr4j.session.Session;
 import net.java.otr4j.session.SessionStatus;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import eu.siacs.conversations.Config;
 import eu.siacs.conversations.entities.Account;
 import eu.siacs.conversations.entities.Contact;
 import eu.siacs.conversations.entities.Conversation;
 import eu.siacs.conversations.entities.Message;
+import eu.siacs.conversations.generator.AbstractGenerator;
 import eu.siacs.conversations.services.XmppConnectionService;
 import eu.siacs.conversations.utils.CryptoHelper;
 import eu.siacs.conversations.xml.Element;
@@ -114,11 +120,13 @@ public class MessageParser extends AbstractParser implements
 			Message finishedMessage = new Message(conversation, body, Message.ENCRYPTION_OTR,
 					Message.STATUS_RECEIVED);
 			finishedMessage.setTime(getTimestamp(packet));
+			finishedMessage.setTimeout(getTimeout(packet));
 			finishedMessage.setRemoteMsgId(packet.getId());
 			finishedMessage.markable = isMarkable(packet);
 			finishedMessage.setCounterpart(from);
 			return finishedMessage;
 		} catch (Exception e) {
+			Log.d(Config.LOGTAG,"exception");
 			String receivedId = packet.getId();
 			if (receivedId != null) {
 				mXmppConnectionService.replyWithNotAcceptable(account, packet);
@@ -180,6 +188,7 @@ public class MessageParser extends AbstractParser implements
 			return null;
 		}
 		finishedMessage.setTime(getTimestamp(packet));
+		finishedMessage.setTimeout(getTimeout(packet));
 		return finishedMessage;
 	}
 
@@ -249,6 +258,7 @@ public class MessageParser extends AbstractParser implements
 					Message.ENCRYPTION_NONE, status);
 		}
 		finishedMessage.setTime(getTimestamp(message));
+		finishedMessage.setTimeout(getTimeout(message));
 		finishedMessage.setRemoteMsgId(message.getAttribute("id"));
 		finishedMessage.markable = isMarkable(message);
 		finishedMessage.setCounterpart(fullJid);
@@ -500,6 +510,7 @@ public class MessageParser extends AbstractParser implements
 		} else {
 			mXmppConnectionService.getNotificationService().push(message);
 		}
+		Log.d(Config.LOGTAG,"timeout: "+ message.getTimeout());
 		mXmppConnectionService.updateConversationUi();
 	}
 
@@ -520,6 +531,25 @@ public class MessageParser extends AbstractParser implements
 						packet.getFrom());
 				contact.setPresenceName(nick.getContent());
 			}
+		}
+	}
+
+	private long getTimeout(Element message) {
+		Element timeout = message.findChild("timeout","eu:siacs:conversations:timeout");
+		String at = timeout == null ? null : timeout.getAttribute("at");
+		if (at != null) {
+			try {
+				at = at.replace("Z", "+0000");
+				Date date = new SimpleDateFormat(
+						"yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.US)
+						.parse(at);
+				return date.getTime();
+			} catch (final ParseException e) {
+				Log.d(Config.LOGTAG,"parse exception: "+e.getMessage());
+				return 0;
+			}
+		} else {
+			return 0;
 		}
 	}
 }

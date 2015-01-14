@@ -189,6 +189,14 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 				viewHolder.time.setText(formatedTime);
 			}
 		}
+		if (message.getTimeout() == 0) {
+			viewHolder.timeout.setVisibility(View.GONE);
+			viewHolder.indicatorTimeout.setVisibility(View.GONE);
+		} else {
+			viewHolder.timeout.setVisibility(View.VISIBLE);
+			viewHolder.indicatorTimeout.setVisibility(View.VISIBLE);
+			viewHolder.timeout.setText(UIHelper.getReadableTimeout(activity,message.getTimeout()));
+		}
 	}
 
 	private void displayInfoMessage(ViewHolder viewHolder, String text) {
@@ -367,6 +375,8 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 						.findViewById(R.id.message_time);
 				viewHolder.indicatorReceived = (ImageView) view
 						.findViewById(R.id.indicator_received);
+				viewHolder.indicatorTimeout = (ImageView) view.findViewById(R.id.timeout_indicator);
+				viewHolder.timeout = (TextView) view.findViewById(R.id.message_timeout);
 				break;
 			case RECEIVED:
 				view = activity.getLayoutInflater().inflate(
@@ -387,6 +397,8 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 						.findViewById(R.id.message_time);
 				viewHolder.indicatorReceived = (ImageView) view
 						.findViewById(R.id.indicator_received);
+				viewHolder.indicatorTimeout = (ImageView) view.findViewById(R.id.timeout_indicator);
+				viewHolder.timeout = (TextView) view.findViewById(R.id.message_timeout);
 				break;
 			case STATUS:
 				view = activity.getLayoutInflater().inflate(
@@ -479,7 +491,9 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 					}
 				});
 
-		if (message.getDownloadable() != null && message.getDownloadable().getStatus() != Downloadable.STATUS_UPLOADING) {
+		if (message.hasTimedout()) {
+			displayInfoMessage(viewHolder,activity.getString(R.string.message_has_been_destroyed));
+		} else if (message.getDownloadable() != null && message.getDownloadable().getStatus() != Downloadable.STATUS_UPLOADING) {
 			Downloadable d = message.getDownloadable();
 			if (d.getStatus() == Downloadable.STATUS_DOWNLOADING) {
 				if (message.getType() == Message.TYPE_FILE) {
@@ -514,7 +528,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 			displayImageMessage(viewHolder, message);
 		} else if (message.getType() == Message.TYPE_FILE && message.getEncryption() != Message.ENCRYPTION_PGP && message.getEncryption() != Message.ENCRYPTION_DECRYPTION_FAILED) {
 			if (message.getImageParams().width > 0) {
-				displayImageMessage(viewHolder,message);
+				displayImageMessage(viewHolder, message);
 			} else {
 				displayOpenableMessage(viewHolder, message);
 			}
@@ -590,6 +604,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 		protected TextView time;
 		protected TextView messageBody;
 		protected ImageView contact_picture;
-
+		protected ImageView indicatorTimeout;
+		protected TextView timeout;
 	}
 }

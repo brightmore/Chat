@@ -411,6 +411,13 @@ public class XmppConnectionService extends Service {
 		}
 		this.wakeLock.acquire();
 
+
+		if (databaseBackend.deleteTimedoutMessages() > 0) {
+			Log.d(Config.LOGTAG,"timedout messages deleted");
+			updateConversationUi();
+		}
+
+
 		for (Account account : accounts) {
 			if (!account.isOptionSet(Account.OPTION_DISABLED)) {
 				if (!hasInternetConnection()) {
@@ -613,6 +620,11 @@ public class XmppConnectionService extends Service {
 		Account account = message.getConversation().getAccount();
 		account.deactivateGracePeriod();
 		Conversation conv = message.getConversation();
+		if (message.getType() == Message.TYPE_TEXT && conv.getNextTimeout() != 0) {
+			message.setTimeout(conv.getNextTimeout() * 1000 + message.getTimeSent());
+		} else {
+			message.setTimeout(0);
+		}
 		MessagePacket packet = null;
 		boolean saveInDb = true;
 		boolean send = false;

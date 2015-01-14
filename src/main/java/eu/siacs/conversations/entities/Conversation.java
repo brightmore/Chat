@@ -45,6 +45,7 @@ public class Conversation extends AbstractEntity {
 	public static final String ATTRIBUTE_NEXT_ENCRYPTION = "next_encryption";
 	public static final String ATTRIBUTE_MUC_PASSWORD = "muc_password";
 	public static final String ATTRIBUTE_MUTED_TILL = "muted_till";
+	public static final String ATTRIBUTE_MESSAGE_TIMEOUT = "message_timeout";
 
 	private String name;
 	private String contactUuid;
@@ -367,6 +368,14 @@ public class Conversation extends AbstractEntity {
 		} else {
 			return latestEncryption;
 		}
+	}
+
+	public int getNextTimeout() {
+		return this.getIntAttribute(ATTRIBUTE_MESSAGE_TIMEOUT,0);
+	}
+
+	public void setNextTimeout(int value) {
+		this.setAttribute(ATTRIBUTE_MESSAGE_TIMEOUT,String.valueOf(value));
 	}
 
 	public int getNextEncryption(boolean force) {

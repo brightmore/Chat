@@ -11,10 +11,12 @@ import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.v4.widget.SlidingPaneLayout;
 import android.support.v4.widget.SlidingPaneLayout.PanelSlideListener;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -34,6 +36,7 @@ import net.java.otr4j.session.SessionStatus;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.siacs.conversations.Config;
 import eu.siacs.conversations.R;
 import eu.siacs.conversations.entities.Contact;
 import eu.siacs.conversations.entities.Conversation;
@@ -65,6 +68,8 @@ public class ConversationActivity extends XmppActivity implements
 	private static final int ATTACHMENT_CHOICE_CHOOSE_IMAGE = 0x0301;
 	private static final int ATTACHMENT_CHOICE_TAKE_PHOTO = 0x0302;
 	private static final int ATTACHMENT_CHOICE_CHOOSE_FILE = 0x0303;
+
+	private static final int REFRESH_UI_INTERVAL = 10000;
 	private static final String STATE_OPEN_CONVERSATION = "state_open_conversation";
 	private static final String STATE_PANEL_OPEN = "state_panel_open";
 	private static final String STATE_PENDING_URI = "state_pending_uri";
@@ -85,6 +90,18 @@ public class ConversationActivity extends XmppActivity implements
 	private ArrayAdapter<Conversation> listAdapter;
 
 	private Toast prepareFileToast;
+
+	private Handler updateHandler = new Handler();
+	private Runnable refreshUi = new Runnable() {
+		@Override
+		public void run() {
+			onConversationUpdate();
+			if (isRunning) {
+				updateHandler.postDelayed(this, REFRESH_UI_INTERVAL);
+			}
+		}
+	};
+	private boolean isRunning = false;
 
 
 	public List<Conversation> getConversationList() {
@@ -337,6 +354,7 @@ public class ConversationActivity extends XmppActivity implements
 		MenuItem menuInviteContact = menu.findItem(R.id.action_invite);
 		MenuItem menuMute = menu.findItem(R.id.action_mute);
 		MenuItem menuUnmute = menu.findItem(R.id.action_unmute);
+		MenuItem menuTimeout = menu.findItem(R.id.action_timeout);
 
 		if (isConversationsOverviewVisable()
 				&& isConversationsOverviewHideable()) {
@@ -348,6 +366,7 @@ public class ConversationActivity extends XmppActivity implements
 			menuAttach.setVisible(false);
 			menuMute.setVisible(false);
 			menuUnmute.setVisible(false);
+			menuTimeout.setVisible(false);
 		} else {
 			menuAdd.setVisible(!isConversationsOverviewHideable());
 			if (this.getSelectedConversation() != null) {
@@ -480,6 +499,9 @@ public class ConversationActivity extends XmppActivity implements
 				case R.id.action_attach_file:
 					attachFileDialog();
 					break;
+				case R.id.action_timeout:
+					chooseMessageTimeoutDialog(findViewById(R.id.action_timeout));
+					break;
 				case R.id.action_archive:
                     this.xmppConnectionService.clearConversationHistory(getSelectedConversation());
 					this.endConversation(getSelectedConversation());
@@ -567,26 +589,103 @@ public class ConversationActivity extends XmppActivity implements
 		}
 		PopupMenu attachFilePopup = new PopupMenu(this, menuAttachFile);
 		attachFilePopup.inflate(R.menu.attachment_choices);
-		attachFilePopup
-				.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+		attachFilePopup.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
-					@Override
-					public boolean onMenuItemClick(MenuItem item) {
-						switch (item.getItemId()) {
-							case R.id.attach_choose_picture:
-								attachFile(ATTACHMENT_CHOICE_CHOOSE_IMAGE);
-								break;
-							case R.id.attach_take_picture:
-								attachFile(ATTACHMENT_CHOICE_TAKE_PHOTO);
-								break;
-							case R.id.action_choose_file:
-								attachFile(ATTACHMENT_CHOICE_CHOOSE_FILE);
-								break;
-						}
-						return false;
-					}
-				});
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				switch (item.getItemId()) {
+					case R.id.attach_choose_picture:
+						attachFile(ATTACHMENT_CHOICE_CHOOSE_IMAGE);
+						break;
+					case R.id.attach_take_picture:
+						attachFile(ATTACHMENT_CHOICE_TAKE_PHOTO);
+						break;
+					case R.id.action_choose_file:
+						attachFile(ATTACHMENT_CHOICE_CHOOSE_FILE);
+						break;
+				}
+				return false;
+			}
+		});
 		attachFilePopup.show();
+	}
+
+	protected void chooseMessageTimeoutDialog(View view) {
+		PopupMenu timeoutPopup = new PopupMenu(this,view);
+		timeoutPopup.inflate(R.menu.timeout_choices);
+		MenuItem never = timeoutPopup.getMenu().findItem(R.id.timeout_never);
+		MenuItem thirtyMinutes = timeoutPopup.getMenu().findItem(R.id.timeout_30min);
+		MenuItem oneHour = timeoutPopup.getMenu().findItem(R.id.timeout_1h);
+		MenuItem sixHours = timeoutPopup.getMenu().findItem(R.id.timeout_6h);
+		MenuItem twelveHours = timeoutPopup.getMenu().findItem(R.id.timeout_12h);
+		MenuItem oneDay = timeoutPopup.getMenu().findItem(R.id.timeout_1d);
+		MenuItem oneWeek = timeoutPopup.getMenu().findItem(R.id.timeout_1w);
+		MenuItem oneMonth = timeoutPopup.getMenu().findItem(R.id.timeout_1m);
+		switch(getSelectedConversation().getNextTimeout()) {
+			case 0:
+				never.setChecked(true);
+				break;
+			case 60 * 30:
+				thirtyMinutes.setChecked(true);
+				break;
+			case 60 * 60:
+				oneHour.setChecked(true);
+				break;
+			case 60 * 60 * 6:
+				sixHours.setChecked(true);
+				break;
+			case 60 * 60 * 12:
+				twelveHours.setChecked(true);
+				break;
+			case 60 * 60 * 24:
+				oneDay.setChecked(true);
+				break;
+			case 60 * 60 * 24 * 7:
+				oneWeek.setChecked(true);
+				break;
+			case 60 * 60 * 24 * 30:
+				oneMonth.setChecked(true);
+				break;
+			default:
+				never.setChecked(true);
+				break;
+		}
+		timeoutPopup.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+			@Override
+			public boolean onMenuItemClick(MenuItem menuItem) {
+				switch (menuItem.getItemId()) {
+					case R.id.timeout_never:
+						getSelectedConversation().setNextTimeout(0);
+						break;
+					case R.id.timeout_30min:
+						getSelectedConversation().setNextTimeout(60 * 30);
+						break;
+					case R.id.timeout_1h:
+						getSelectedConversation().setNextTimeout(60 * 60);
+						break;
+					case R.id.timeout_6h:
+						getSelectedConversation().setNextTimeout(60 * 60 * 6);
+						break;
+					case R.id.timeout_12h:
+						getSelectedConversation().setNextTimeout(60 * 60 * 12);
+						break;
+					case R.id.timeout_1d:
+						getSelectedConversation().setNextTimeout(60 * 60 * 24);
+						break;
+					case R.id.timeout_1w:
+						getSelectedConversation().setNextTimeout(60 * 60 * 24 * 7);
+						break;
+					case R.id.timeout_1m:
+						getSelectedConversation().setNextTimeout(60 * 60 * 24 * 30);
+						break;
+					default:
+						getSelectedConversation().setNextTimeout(0);
+						break;
+				}
+				return false;
+			}
+		});
+		timeoutPopup.show();
 	}
 
 	public void verifyOtrSessionDialog(final Conversation conversation, View view) {
@@ -772,6 +871,14 @@ public class ConversationActivity extends XmppActivity implements
 		if (conversationList.size() >= 1) {
 			this.onConversationUpdate();
 		}
+		this.isRunning = true;
+		this.updateHandler.postDelayed(this.refreshUi,REFRESH_UI_INTERVAL);
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		this.isRunning = false;
 	}
 
 	@Override

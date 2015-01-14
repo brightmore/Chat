@@ -79,6 +79,27 @@
                     android:text="@string/sending"
                     android:textColor="@color/secondarytext"
                     android:textSize="?attr/TextSizeInfo" />
+
+                <ImageView
+                    android:layout_marginLeft="8sp"
+                    android:id="@+id/timeout_indicator"
+                    android:layout_width="?attr/TextSizeInfo"
+                    android:layout_height="?attr/TextSizeInfo"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="4sp"
+                    android:alpha="0.54"
+                    android:gravity="center_vertical"
+                    android:src="@drawable/ic_timeout_indicator" />
+
+                <TextView
+                    android:id="@+id/message_timeout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:text="@string/sending"
+                    android:textColor="@color/secondarytext"
+                    android:textSize="?attr/TextSizeInfo" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

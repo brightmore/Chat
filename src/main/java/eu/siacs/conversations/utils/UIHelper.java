@@ -106,6 +106,25 @@ public class UIHelper {
 		}
 	}
 
+	public static String getReadableTimeout(Context context, long timeout) {
+		long diff = (timeout - System.currentTimeMillis()) / 1000;
+		if (diff > 60 * 60 * 24 * 2) {
+			return context.getString(R.string.days,Math.round(diff /(60 * 60 * 24.0)));
+		} else if (diff > 60 * 60 * 24) {
+			return context.getString(R.string.one_day);
+		} else if (diff > 60 * 60 * 2) {
+			return context.getString(R.string.hours,Math.round(diff / (60 * 60.0)));
+		} else if (diff > 60 * 60) {
+			return context.getString(R.string.one_hour);
+		} else if (diff > 60 * 2) {
+			return context.getString(R.string.minutes,Math.round(diff / 60.0));
+		} else if (diff > 0) {
+			return context.getString(R.string.one_minute);
+		} else {
+			return context.getString(R.string.destroyed);
+		}
+	}
+
 	private final static class EmoticonPattern {
 		Pattern pattern;
 		String replacement;

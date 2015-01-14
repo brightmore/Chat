@@ -11,6 +11,7 @@ import eu.siacs.conversations.entities.Message;
 import eu.siacs.conversations.entities.Roster;
 import eu.siacs.conversations.xmpp.jid.Jid;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteCantOpenDatabaseException;
@@ -22,7 +23,7 @@ public class DatabaseBackend extends SQLiteOpenHelper {
 	private static DatabaseBackend instance = null;
 
 	private static final String DATABASE_NAME = "history";
-	private static final int DATABASE_VERSION = 11;
+	private static final int DATABASE_VERSION = 13;
 
 	private static String CREATE_CONTATCS_STATEMENT = "create table "
 			+ Contact.TABLENAME + "(" + Contact.ACCOUNT + " TEXT, "
@@ -65,6 +66,7 @@ public class DatabaseBackend extends SQLiteOpenHelper {
 				+ Message.BODY + " TEXT, " + Message.ENCRYPTION + " NUMBER, "
 				+ Message.STATUS + " NUMBER," + Message.TYPE + " NUMBER, "
 				+ Message.RELATIVE_FILE_PATH + " TEXT, "
+				+ Message.TIMEOUT + " NUMBER,"
 				+ Message.REMOTE_MSG_ID + " TEXT, FOREIGN KEY("
 				+ Message.CONVERSATION + ") REFERENCES "
 				+ Conversation.TABLENAME + "(" + Conversation.UUID
@@ -121,6 +123,10 @@ public class DatabaseBackend extends SQLiteOpenHelper {
 			db.execSQL("delete from "+Contact.TABLENAME);
 			db.execSQL("update "+Account.TABLENAME+" set "+Account.ROSTERVERSION+" = NULL");
 		}
+		if (oldVersion < 13 && newVersion >= 13) {
+			db.execSQL("ALTER TABLE " + Message.TABLENAME + " ADD COLUMN "
+					+ Message.TIMEOUT+ " NUMBER");
+		}
 	}
 
 	public static synchronized DatabaseBackend getInstance(Context context) {
@@ -159,6 +165,15 @@ public class DatabaseBackend extends SQLiteOpenHelper {
 		int count = cursor.getInt(0);
 		cursor.close();
 		return count;
+	}
+
+	public int deleteTimedoutMessages() {
+		SQLiteDatabase db = this.getWritableDatabase();
+		final String where = Message.TIMEOUT +"<=? AND "+Message.TIMEOUT+"!=? AND "+Message.BODY+" is not null";
+		final String[] whereArgs = {String.valueOf(System.currentTimeMillis()),String.valueOf(0)};
+		ContentValues values = new ContentValues();
+		values.putNull(Message.BODY);
+		return db.update(Message.TABLENAME, values, where, whereArgs);
 	}
 
 	public CopyOnWriteArrayList<Conversation> getConversations(int status) {

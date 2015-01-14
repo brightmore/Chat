@@ -46,6 +46,7 @@ public class Message extends AbstractEntity {
 	public static String TYPE = "type";
 	public static String REMOTE_MSG_ID = "remoteMsgId";
 	public static String RELATIVE_FILE_PATH = "relativeFilePath";
+	public static String TIMEOUT = "timeout";
 	public boolean markable = false;
 	protected String conversationUuid;
 	protected Jid counterpart;
@@ -53,6 +54,7 @@ public class Message extends AbstractEntity {
 	protected String body;
 	protected String encryptedBody;
 	protected long timeSent;
+	protected long timeout;
 	protected int encryption;
 	protected int status;
 	protected int type;
@@ -76,13 +78,14 @@ public class Message extends AbstractEntity {
 		this(java.util.UUID.randomUUID().toString(), conversation.getUuid(),
 				conversation.getContactJid().toBareJid(), null, body, System
 						.currentTimeMillis(), encryption,
-				status, TYPE_TEXT, null, null);
+				status, TYPE_TEXT, null, null,0);
 		this.conversation = conversation;
 	}
 
 	public Message(final String uuid, final String conversationUUid, final Jid counterpart,
 				   final Jid trueCounterpart, final String body, final long timeSent,
-				   final int encryption, final int status, final int type, final String remoteMsgId, final String relativeFilePath) {
+				   final int encryption, final int status, final int type, final String remoteMsgId,
+				   final String relativeFilePath, final long timeout) {
 		this.uuid = uuid;
 		this.conversationUuid = conversationUUid;
 		this.counterpart = counterpart;
@@ -94,6 +97,7 @@ public class Message extends AbstractEntity {
 		this.type = type;
 		this.remoteMsgId = remoteMsgId;
 		this.relativeFilePath = relativeFilePath;
+		this.timeout = timeout;
 	}
 
 	public static Message fromCursor(Cursor cursor) {
@@ -129,7 +133,8 @@ public class Message extends AbstractEntity {
 				cursor.getInt(cursor.getColumnIndex(STATUS)),
 				cursor.getInt(cursor.getColumnIndex(TYPE)),
 				cursor.getString(cursor.getColumnIndex(REMOTE_MSG_ID)),
-				cursor.getString(cursor.getColumnIndex(RELATIVE_FILE_PATH)));
+				cursor.getString(cursor.getColumnIndex(RELATIVE_FILE_PATH)),
+				cursor.getLong(cursor.getColumnIndex(TIMEOUT)));
 	}
 
 	public static Message createStatusMessage(Conversation conversation) {
@@ -161,6 +166,7 @@ public class Message extends AbstractEntity {
 		values.put(TYPE, type);
 		values.put(REMOTE_MSG_ID, remoteMsgId);
 		values.put(RELATIVE_FILE_PATH, relativeFilePath);
+		values.put(TIMEOUT,timeout);
 		return values;
 	}
 
@@ -207,6 +213,14 @@ public class Message extends AbstractEntity {
 
 	public long getTimeSent() {
 		return timeSent;
+	}
+
+	public long getTimeout() {
+		return this.timeout;
+	}
+
+	public void setTimeout(long timeout) {
+		this.timeout = timeout;
 	}
 
 	public int getEncryption() {
@@ -321,7 +335,19 @@ public class Message extends AbstractEntity {
 	}
 
 	public boolean mergeable(final Message message) {
-		return message != null && (message.getType() == Message.TYPE_TEXT && this.getDownloadable() == null && message.getDownloadable() == null && message.getEncryption() != Message.ENCRYPTION_PGP && this.getType() == message.getType() && this.getStatus() == message.getStatus() && this.getEncryption() == message.getEncryption() && this.getCounterpart() != null && this.getCounterpart().equals(message.getCounterpart()) && (message.getTimeSent() - this.getTimeSent()) <= (Config.MESSAGE_MERGE_WINDOW * 1000) && !message.bodyContainsDownloadable() && !this.bodyContainsDownloadable());
+		return message != null
+				&& (message.getType() == Message.TYPE_TEXT
+				&& this.getDownloadable() == null
+				&& message.getDownloadable() == null
+				&& message.getEncryption() != Message.ENCRYPTION_PGP
+				&& this.getType() == message.getType()
+				&& this.getStatus() == message.getStatus()
+				&& this.getEncryption() == message.getEncryption()
+				&& this.getCounterpart() != null
+				&& this.getCounterpart().equals(message.getCounterpart())
+				&& Math.abs(message.getTimeout()-this.getTimeout()) <= (Config.MESSAGE_MERGE_WINDOW * 1000)
+				&& (message.getTimeSent() - this.getTimeSent()) <= (Config.MESSAGE_MERGE_WINDOW * 1000)
+				&& !message.bodyContainsDownloadable() && !this.bodyContainsDownloadable());
 	}
 
 	public String getMergedBody() {
@@ -330,6 +356,11 @@ public class Message extends AbstractEntity {
 			return body.trim() + '\n' + next.getMergedBody();
 		}
 		return body.trim();
+	}
+
+	public boolean hasTimedout() {
+		final long timeout = this.getTimeout();
+		return timeout != 0  && System.currentTimeMillis() > timeout;
 	}
 
 	public int getMergedStatus() {
