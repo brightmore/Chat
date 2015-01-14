@@ -79,7 +79,12 @@ public class ConversationAdapter extends ArrayAdapter<Conversation> {
 			convName.setTypeface(null, Typeface.NORMAL);
 		}
 
-		if (message.getType() == Message.TYPE_IMAGE || message.getType() == Message.TYPE_FILE
+		if (message.hasTimedout()) {
+			mLastMessage.setTypeface(null, Typeface.ITALIC);
+			mLastMessage.setText(activity.getString(R.string.message_has_been_destroyed));
+			mLastMessage.setVisibility(View.VISIBLE);
+			imagePreview.setVisibility(View.GONE);
+		} else if (message.getType() == Message.TYPE_IMAGE || message.getType() == Message.TYPE_FILE
 				|| message.getDownloadable() != null) {
 			Downloadable d = message.getDownloadable();
 			if (conversation.isRead()) {
