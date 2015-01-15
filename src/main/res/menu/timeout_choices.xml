@@ -10,9 +10,11 @@
             android:title="@string/thirty_minutes"/>
         <item
             android:id="@+id/timeout_1h"
+            android:visible="false"
             android:title="@string/one_hour"/>
         <item
             android:id="@+id/timeout_6h"
+            android:visible="false"
             android:title="@string/six_hours"/>
         <item
             android:id="@+id/timeout_12h"

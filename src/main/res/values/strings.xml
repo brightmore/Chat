@@ -47,7 +47,7 @@
     <string name="save">Save</string>
     <string name="ok">OK</string>
     <string name="crash_report_title">Chat has crashed</string>
-    <string name="crash_report_message">By sending in stack traces you are helping the ongoing development of Chat\n<b>Warning:</b> This will use your chat account to send the stack trace to the developer.</string>
+    <string name="crash_report_message">By sending in stack traces you are helping the ongoing development of this application\n\n<b>Warning:</b> This will use your personal account to send the stack trace to the developer.</string>
     <string name="send_now">Send now</string>
     <string name="send_never">Never ask again</string>
     <string name="problem_connecting_to_account">Unable to connect to account</string>
@@ -387,7 +387,7 @@
     <string name="message_timeout">Message timeout</string>
     <string name="never">Never</string>
     <string name="thirty_minutes">30 minutes</string>
-    <string name="one_hour">1 hours</string>
+    <string name="one_hour">1 hour</string>
     <string name="six_hours">6 hours</string>
     <string name="twelve_hours">12 hours</string>
     <string name="one_day">1 day</string>
@@ -397,6 +397,6 @@
     <string name="hours">%s hours</string>
     <string name="minutes">%s minutes</string>
     <string name="one_minute">1 minute</string>
-    <string name="message_has_been_destroyed">This message has been destroyed</string>
+    <string name="message_has_been_destroyed">This message was destroyed</string>
     <string name="destroyed">Destroyed</string>
 </resources>
