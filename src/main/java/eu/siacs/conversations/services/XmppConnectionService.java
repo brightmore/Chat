@@ -621,7 +621,7 @@ public class XmppConnectionService extends Service {
 		account.deactivateGracePeriod();
 		Conversation conv = message.getConversation();
 		if (message.getType() == Message.TYPE_TEXT && conv.getNextTimeout() != 0) {
-			message.setTimeout(conv.getNextTimeout() * 1000 + message.getTimeSent());
+			message.setTimeout(conv.getNextTimeout() * 1000L + message.getTimeSent());
 		} else {
 			message.setTimeout(0);
 		}
