@@ -108,13 +108,15 @@ public class UIHelper {
 
 	public static String getReadableTimeout(Context context, long timeout) {
 		long diff = (timeout - System.currentTimeMillis()) / 1000;
-		if (diff > 60 * 60 * 24 * 2) {
+		if (diff > 60 * 60 * 24 * 29) {
+			return context.getString(R.string.one_month);
+		} else if (diff > 60 * 60 * 24 * 2) {
 			return context.getString(R.string.days,Math.round(diff /(60 * 60 * 24.0)));
-		} else if (diff > 60 * 60 * 24) {
+		} else if (diff > 60 * 60 * 23) {
 			return context.getString(R.string.one_day);
 		} else if (diff > 60 * 60 * 2) {
 			return context.getString(R.string.hours,Math.round(diff / (60 * 60.0)));
-		} else if (diff > 60 * 60) {
+		} else if (diff > 60 * 59) {
 			return context.getString(R.string.one_hour);
 		} else if (diff > 60 * 2) {
 			return context.getString(R.string.minutes,Math.round(diff / 60.0));
